@@ -7,8 +7,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
-//use Application\Connection;
-//use Application\Models\Produto;
+use Slim\Exception\HttpNotFoundException;
 
 return function (App $app) {
     $app->options('/{routes:.*}', function (Request $request, Response $response) {
@@ -26,18 +25,18 @@ return function (App $app) {
         $group->get('/{id}', ViewUserAction::class);
     });
 
-    /*
-    $app->group('/api/v1', function(Group $group){
-        $group->get('/produtos', function(Request $request, Response $response) { 
-
-            $payload = json_encode(['hello' => 'world'], JSON_PRETTY_PRINT);
-            $response->getBody()->write($payload);
-            
-            return $response->withHeader('Content-Type', 'application/json');
-        });
-    });
-    */
-
     //Produtos
-    require __DIR__ . '/../app/routes/produtos.php'; 
+    require __DIR__ . '/../app/routes/autenticacao.php';
+
+    require __DIR__ . '/../app/routes/produtos.php';
+
+    /**
+     * Catch-all route to serve a 404 Not Found page if none of the routes match
+     * NOTE: make sure this route is defined last
+     */
+    
+    $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
+        throw new HttpNotFoundException($request);
+    });
+
 };

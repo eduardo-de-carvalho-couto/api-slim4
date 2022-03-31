@@ -30,6 +30,8 @@ return function (ContainerBuilder $containerBuilder) {
                     'collation' => 'utf8_unicode_ci',
                     'prefix' => '',
                 ],
+                //Secret
+                'secretKey' => '8fc568022b5a860884874bcf5ecf5f5c3a48e7b1',
             ]);
         }
     ]);
